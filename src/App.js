@@ -6,6 +6,8 @@ function App() {
   const [users, updateUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentList, setCurrentList] = useState([]);
+  const [searchInput, onInputChange] = useState("");
+  const [filterArr, setFilteredArr] = useState([]);
   const onPageChange = page => {
     setCurrentPage(page);
     const end = page * 5;
@@ -64,6 +66,31 @@ function App() {
   return (
     <Layout>
       <Header>Data peace</Header>
+      <form>
+        <label>
+          Search by first name{" "}
+          <input
+            type="text"
+            name="first_name"
+            value={searchInput}
+            onChange={e => {
+              if (e.target.value === "") {
+                setCurrentList(users.slice(0, 5));
+              } else {
+                const result = users.filter(user =>
+                  user.first_name.toLowerCase().includes(e.target.value)
+                );
+                setFilteredArr(result);
+                const end = currentPage * 5;
+                const start = end - 5;
+                setCurrentList(result.slice(start, end));
+                setCurrentPage(1);
+              }
+              onInputChange(e.target.value);
+            }}
+          />
+        </label>
+      </form>
       <Table>
         <thead>
           <tr>
@@ -76,8 +103,8 @@ function App() {
           {currentList.map(list => {
             return (
               <tr key={list.id}>
-                {columns.map(column => {
-                  return <td>{list[column.path]}</td>;
+                {columns.map((column, index) => {
+                  return <td key={index}>{list[column.path]}</td>;
                 })}
               </tr>
             );
@@ -85,7 +112,7 @@ function App() {
         </tbody>
       </Table>
       <Pagination
-        itemsCount={users.length}
+        itemsCount={searchInput === "" ? users.length : filterArr.length}
         pageSize={5}
         currentPage={currentPage}
         onPageChange={onPageChange}
