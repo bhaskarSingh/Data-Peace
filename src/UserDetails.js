@@ -8,7 +8,7 @@ const UserDetails = props => {
   const user = props.location.state;
   return (
     <Layout>
-      <Header>User Details</Header>
+      <Header navigateBack>User Details</Header>
       <CardContainer>
         <Title>First Name : Last Name</Title>
         <Content>
