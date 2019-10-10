@@ -31,13 +31,15 @@ function App() {
   return (
     <Layout>
       <Header>Data peace</Header>
-      <form>
-        <label>
-          Search by first name{" "}
+      <form style={{ margin: 10 }}>
+        <label style={{ fontSize: "1.4rem" }}>
+          Search By First Name{" "}
           <input
+            style={{ fontSize: "1.4rem" }}
             type="text"
             name="first_name"
             value={searchInput}
+            placeholder="Search by first name"
             onChange={e => {
               if (e.target.value === "") {
                 const end = currentPage * 5;
