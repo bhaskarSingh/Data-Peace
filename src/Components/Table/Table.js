@@ -1,7 +1,7 @@
 import React from "react";
 import StyledTable from "./Table.styled";
 import PropTypes from "prop-types";
-
+import { navigate } from "@reach/router";
 const columns = [
   {
     label: "First Name",
@@ -54,7 +54,12 @@ const Table = ({ currentList }) => {
       <tbody>
         {currentList.map(list => {
           return (
-            <tr key={list.id}>
+            <tr
+              key={list.id}
+              onClick={() => {
+                navigate(`/user/${list.id}`, { state: list });
+              }}
+            >
               {columns.map((column, index) => {
                 return <td key={index}>{list[column.path]}</td>;
               })}

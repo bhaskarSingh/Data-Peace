@@ -34,7 +34,7 @@ const Pagination = ({ itemsCount, pageSize, currentPage, onPageChange }) => {
           return (
             <li key={page}>
               <a
-                href="#"
+                href=""
                 style={{
                   backgroundColor: `${
                     page === currentPage ? "#007bff" : "#fff"
