@@ -27,7 +27,7 @@ function App() {
     ApiRequest();
   }, []);
 
-  if (currentList.length === 0) {
+  if (users.length === 0) {
     return <Loader />;
   }
 
