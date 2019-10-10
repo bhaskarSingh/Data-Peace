@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Header, Pagination, Table } from "./Components";
+import { Layout, Header, Pagination, Table, Loader } from "./Components";
 import axios from "axios";
 function App() {
   const [users, updateUsers] = useState([]);
@@ -27,6 +27,10 @@ function App() {
   useEffect(() => {
     ApiRequest();
   }, []);
+
+  if (currentList.length === 0) {
+    return <Loader />;
+  }
 
   return (
     <Layout>
