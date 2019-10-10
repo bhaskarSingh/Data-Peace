@@ -21,7 +21,6 @@ function App() {
   const ApiRequest = async () => {
     const result = await axios("https://demo9197058.mockable.io/users");
     updateUsers(result.data);
-    console.log(result.data);
     setCurrentList(result.data.slice(0, 5));
   };
   useEffect(() => {

@@ -15,7 +15,7 @@ const StyledTable = styled.table`
     color: white;
   }
 
-  tr:nth-child(even) {
+  tr:nth-of-type(even) {
     background-color: #f2f2f2;
   }
 
