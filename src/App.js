@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Layout, Header, Pagination, Table, Loader } from "./Components";
 import axios from "axios";
+import _ from "lodash";
 function App() {
   const [users, updateUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -8,6 +9,10 @@ function App() {
   const [searchInput, onInputChange] = useState("");
   const [filteredLength, setFilteredLength] = useState(1);
   const [filteredList, setFilteredList] = useState([]);
+  const [sortColumn, setSortColumn] = useState({
+    order: "asc",
+    path: "first_name"
+  });
   const onPageChange = page => {
     setCurrentPage(page);
     const end = page * 5;
@@ -16,16 +21,29 @@ function App() {
       searchInput === ""
         ? users.slice(start, end)
         : filteredList.slice(start, end);
-    setCurrentList(value);
+    const sortedList = _.orderBy(value, [sortColumn.path], [sortColumn.order]);
+    setCurrentList(sortedList);
   };
   const ApiRequest = async () => {
     const result = await axios("https://demo9197058.mockable.io/users");
     updateUsers(result.data);
-    setCurrentList(result.data.slice(0, 5));
+    const defaulSortedList = _.orderBy(
+      result.data.slice(0, 5),
+      [sortColumn.path],
+      [sortColumn.order]
+    );
+    setCurrentList(defaulSortedList);
   };
   useEffect(() => {
     ApiRequest();
   }, []);
+
+  const handleSort = path => {
+    const order = sortColumn.order === "asc" ? "desc" : "asc";
+    const sortedList = _.orderBy(currentList, [path], [order]);
+    setCurrentList(sortedList);
+    setSortColumn({ path, order });
+  };
 
   if (users.length === 0) {
     return <Loader />;
@@ -47,14 +65,24 @@ function App() {
               if (e.target.value === "") {
                 const end = currentPage * 5;
                 const start = end - 5;
-                setCurrentList(users.slice(start, end));
+                const sortedList = _.orderBy(
+                  users.slice(start, end),
+                  [sortColumn.path],
+                  [sortColumn.order]
+                );
+                setCurrentList(sortedList);
               } else {
                 const result = users.filter(user =>
                   user.first_name.toLowerCase().includes(e.target.value)
                 );
                 const end = currentPage * 5;
                 const start = end - 5;
-                setCurrentList(result.slice(start, end));
+                const sortedList = _.orderBy(
+                  result.slice(start, end),
+                  [sortColumn.path],
+                  [sortColumn.order]
+                );
+                setCurrentList(sortedList);
                 setFilteredLength(result.length);
                 setFilteredList(result);
                 setCurrentPage(1);
@@ -64,7 +92,11 @@ function App() {
           />
         </label>
       </form>
-      <Table currentList={currentList} />
+      <Table
+        currentList={currentList}
+        onSort={handleSort}
+        sortColumn={sortColumn}
+      />
       <Pagination
         itemsCount={searchInput === "" ? users.length : filteredLength}
         pageSize={5}

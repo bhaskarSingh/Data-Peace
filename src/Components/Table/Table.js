@@ -2,6 +2,7 @@ import React from "react";
 import StyledTable from "./Table.styled";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 const columns = [
   {
     label: "First Name",
@@ -41,13 +42,24 @@ const columns = [
   }
 ];
 
-const Table = ({ currentList }) => {
+const Table = ({ currentList, onSort, sortColumn }) => {
   return (
     <StyledTable>
       <thead>
         <tr>
           {columns.map(column => {
-            return <th key={column.path}>{column.label}</th>;
+            return (
+              <th onClick={() => onSort(column.path)} key={column.path}>
+                {column.label}
+                {sortColumn.path === column.path ? (
+                  sortColumn.order === "asc" ? (
+                    <FaAngleDown />
+                  ) : (
+                    <FaAngleUp />
+                  )
+                ) : null}
+              </th>
+            );
           })}
         </tr>
       </thead>
