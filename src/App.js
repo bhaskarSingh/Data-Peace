@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Header, Pagination, Table, Loader } from "./Components";
+import { Layout, Header, Pagination, Table, Loader, Error } from "./Components";
 import axios from "axios";
 import _ from "lodash";
 function App() {
@@ -13,6 +13,7 @@ function App() {
     order: "asc",
     path: "first_name"
   });
+  const [error, setError] = useState("");
   const onPageChange = page => {
     setCurrentPage(page);
     const end = page * 5;
@@ -25,14 +26,19 @@ function App() {
     setCurrentList(sortedList);
   };
   const ApiRequest = async () => {
-    const result = await axios("https://demo9197058.mockable.io/users");
-    updateUsers(result.data);
-    const defaulSortedList = _.orderBy(
-      result.data.slice(0, 5),
-      [sortColumn.path],
-      [sortColumn.order]
-    );
-    setCurrentList(defaulSortedList);
+    try {
+      const result = await axios("https://demo9197058.mockable.io/users");
+      updateUsers(result.data);
+      const defaulSortedList = _.orderBy(
+        result.data.slice(0, 5),
+        [sortColumn.path],
+        [sortColumn.order]
+      );
+      setCurrentList(defaulSortedList);
+    } catch (err) {
+      console.log(err);
+      setError(`Error loading user data.`);
+    }
   };
   useEffect(() => {
     ApiRequest();
@@ -45,8 +51,12 @@ function App() {
     setSortColumn({ path, order });
   };
 
-  if (users.length === 0) {
+  if (!error && users.length === 0) {
     return <Loader />;
+  }
+
+  if (error) {
+    return <Error>{error}</Error>;
   }
 
   return (
