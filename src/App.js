@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Header, Pagination, Table, Loader, Error } from "./Components";
+import {
+  Layout,
+  Header,
+  Pagination,
+  Table,
+  Loader,
+  Error,
+  Search
+} from "./Components";
 import axios from "axios";
 import _ from "lodash";
 function App() {
@@ -14,17 +22,6 @@ function App() {
     path: "first_name"
   });
   const [error, setError] = useState("");
-  const onPageChange = page => {
-    setCurrentPage(page);
-    const end = page * 5;
-    const start = end - 5;
-    const value =
-      searchInput === ""
-        ? users.slice(start, end)
-        : filteredList.slice(start, end);
-    const sortedList = _.orderBy(value, [sortColumn.path], [sortColumn.order]);
-    setCurrentList(sortedList);
-  };
   const ApiRequest = async () => {
     try {
       const result = await axios("https://demo9197058.mockable.io/users");
@@ -42,7 +39,20 @@ function App() {
   };
   useEffect(() => {
     ApiRequest();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const onPageChange = page => {
+    setCurrentPage(page);
+    const end = page * 5;
+    const start = end - 5;
+    const value =
+      searchInput === ""
+        ? users.slice(start, end)
+        : filteredList.slice(start, end);
+    const sortedList = _.orderBy(value, [sortColumn.path], [sortColumn.order]);
+    setCurrentList(sortedList);
+  };
 
   const handleSort = path => {
     const order = sortColumn.order === "asc" ? "desc" : "asc";
@@ -62,46 +72,17 @@ function App() {
   return (
     <Layout>
       <Header>Data peace</Header>
-      <form style={{ margin: 10 }}>
-        <label style={{ fontSize: "1.4rem" }}>
-          Search By First Name{" "}
-          <input
-            style={{ fontSize: "1.4rem" }}
-            type="text"
-            name="first_name"
-            value={searchInput}
-            placeholder="Search by first name"
-            onChange={e => {
-              if (e.target.value === "") {
-                const end = currentPage * 5;
-                const start = end - 5;
-                const sortedList = _.orderBy(
-                  users.slice(start, end),
-                  [sortColumn.path],
-                  [sortColumn.order]
-                );
-                setCurrentList(sortedList);
-              } else {
-                const result = users.filter(user =>
-                  user.first_name.toLowerCase().includes(e.target.value)
-                );
-                const end = currentPage * 5;
-                const start = end - 5;
-                const sortedList = _.orderBy(
-                  result.slice(start, end),
-                  [sortColumn.path],
-                  [sortColumn.order]
-                );
-                setCurrentList(sortedList);
-                setFilteredLength(result.length);
-                setFilteredList(result);
-                setCurrentPage(1);
-              }
-              onInputChange(e.target.value);
-            }}
-          />
-        </label>
-      </form>
+      <Search
+        searchInput={searchInput}
+        currentPage={currentPage}
+        sortColumn={sortColumn}
+        users={users}
+        setCurrentList={setCurrentList}
+        setFilteredLength={setFilteredLength}
+        setCurrentPage={setCurrentPage}
+        setFilteredList={setFilteredList}
+        onInputChange={onInputChange}
+      />
       <Table
         currentList={currentList}
         onSort={handleSort}
