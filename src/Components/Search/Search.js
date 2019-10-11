@@ -34,7 +34,9 @@ const Search = ({
               setCurrentList(sortedList);
             } else {
               const result = users.filter(user =>
-                user.first_name.toLowerCase().includes(e.target.value)
+                user.first_name
+                  .toLowerCase()
+                  .includes(e.target.value.toLowerCase())
               );
               const end = currentPage * 5;
               const start = end - 5;
