@@ -45,40 +45,42 @@ const columns = [
 const Table = ({ currentList, onSort, sortColumn }) => {
   return (
     <StyledTable>
-      <thead>
-        <tr>
-          {columns.map(column => {
+      <table>
+        <thead>
+          <tr>
+            {columns.map(column => {
+              return (
+                <th onClick={() => onSort(column.path)} key={column.path}>
+                  {column.label}
+                  {sortColumn.path === column.path ? (
+                    sortColumn.order === "asc" ? (
+                      <FaAngleDown />
+                    ) : (
+                      <FaAngleUp />
+                    )
+                  ) : null}
+                </th>
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {currentList.map(list => {
             return (
-              <th onClick={() => onSort(column.path)} key={column.path}>
-                {column.label}
-                {sortColumn.path === column.path ? (
-                  sortColumn.order === "asc" ? (
-                    <FaAngleDown />
-                  ) : (
-                    <FaAngleUp />
-                  )
-                ) : null}
-              </th>
+              <tr
+                key={list.id}
+                onClick={() => {
+                  navigate(`/user/${list.id}`, { state: list });
+                }}
+              >
+                {columns.map((column, index) => {
+                  return <td key={index}>{list[column.path]}</td>;
+                })}
+              </tr>
             );
           })}
-        </tr>
-      </thead>
-      <tbody>
-        {currentList.map(list => {
-          return (
-            <tr
-              key={list.id}
-              onClick={() => {
-                navigate(`/user/${list.id}`, { state: list });
-              }}
-            >
-              {columns.map((column, index) => {
-                return <td key={index}>{list[column.path]}</td>;
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
+        </tbody>
+      </table>
     </StyledTable>
   );
 };

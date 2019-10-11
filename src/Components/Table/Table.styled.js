@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 
-const StyledTable = styled.table`
+const StyledTable = styled.div`
+  overflow-x: auto;
   th,
   tr {
     border: 1px solid #ddd;
