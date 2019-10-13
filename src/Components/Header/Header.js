@@ -7,12 +7,14 @@ import { IoIosArrowDropleftCircle } from "react-icons/io";
 const Header = ({ children, navigateBack = false }) => {
   return (
     <StyledHeader>
-      <Button
-        style={{ display: navigateBack ? "block" : "none" }}
-        onClick={() => window.history.back()}
-      >
-        <IoIosArrowDropleftCircle size="40px" />
-      </Button>
+      {navigateBack && (
+        <Button
+          data-testid="navigate-back"
+          onClick={() => window.history.back()}
+        >
+          <IoIosArrowDropleftCircle size="40px" />
+        </Button>
+      )}
       <h1>{children}</h1>
     </StyledHeader>
   );
