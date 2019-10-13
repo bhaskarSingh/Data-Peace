@@ -91,7 +91,9 @@ const Table = ({ currentList, onSort, sortColumn }) => {
 };
 
 Table.propTypes = {
-  currentList: PropTypes.array.isRequired
+  currentList: PropTypes.array.isRequired,
+  sortColumn: PropTypes.object.isRequired,
+  onSort: PropTypes.func
 };
 
 export default Table;
