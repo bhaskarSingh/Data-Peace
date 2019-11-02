@@ -24,7 +24,7 @@ function App() {
   const [error, setError] = useState("");
   const ApiRequest = async () => {
     try {
-      const result = await axios("https://demo9197058.mockable.io/users");
+      const result = await axios("https://demo5392086.mockable.io/users");
       updateUsers(result.data);
       const defaulSortedList = _.orderBy(
         result.data.slice(0, 5),
