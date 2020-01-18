@@ -1,5 +1,7 @@
 # Steps to run application locally
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/bhaskarSingh/Data-Peace.svg)](https://greenkeeper.io/)
+
 1. `yarn install` and then run `yarn start` to start the application.
 2. Then go to http://localhost:3000
 
